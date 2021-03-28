@@ -35,7 +35,7 @@ Without help of this library, you would need to: call `vkEnumerateInstanceExtens
 
 Using this library, we start by defining required or supported extensions and layers in the definition file "VkExtensionsFeatures.inl" using appropriate macros:
 
-```cpp
+```
 VKEFH_INSTANCE_EXTENSION(VK_KHR_SURFACE_EXTENSION_NAME)
 VKEFH_INSTANCE_EXTENSION(VK_KHR_WIN32_SURFACE_EXTENSION_NAME)
 VKEFH_INSTANCE_EXTENSION(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)
@@ -123,7 +123,7 @@ Without this library, we would need to call `vkEnumerateDeviceExtensionPropertie
 
 Using this library, we start by defining required or supported extensions and related structures in the definition file "VkExtensionsFeatures.inl" using appropriate macros:
 
-```cpp
+```
 VKEFH_DEVICE_EXTENSION(VK_KHR_SWAPCHAIN_EXTENSION_NAME)
 VKEFH_DEVICE_EXTENSION(VK_EXT_MEMORY_BUDGET_EXTENSION_NAME)
 VKEFH_DEVICE_EXTENSION(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME)
