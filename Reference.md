@@ -122,7 +122,7 @@ Enables or disabled given feature structure, identified by Vulkan structure type
 
 Enables or disables all instance feature structures specified in the definition file.
 
-**STRUCT_NAME& Get##STRUCT_NAME()**
+**STRUCT_NAME& Get##STRUCT_NAME()**<br>
 **const STRUCT_NAME& Get##STRUCT_NAME() const**
 
 Returns reference to a given feature structure, so it can be altered before it is passed as `VkInstanceCreateInfo::pNext`. You shall only disable features, not enable those that are `VK_FALSE` already and so not supported.
@@ -207,7 +207,7 @@ Enables or disabled given feature structure, identified by Vulkan structure type
 
 Enables or disables all device feature structures specified in the definition file.
 
-**STRUCT_NAME& Get##STRUCT_NAME()**
+**STRUCT_NAME& Get##STRUCT_NAME()**<br>
 **const STRUCT_NAME& Get##STRUCT_NAME() const**
 
 Returns reference to a given feature structure, so you can inspect it to see which specific features are supported, as well as alter it before it is passed as `VkDeviceCreateInfo::pNext`. You can call it only after `GetPhysicalDeviceFeatures`. You shall only disable features, not enable those that are `VK_FALSE` already and so not supported.
