@@ -569,6 +569,11 @@ public:
         assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
         return m_Features2.features;
     }
+	const VkPhysicalDeviceFeatures& GetFeatures() const
+	{
+		assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
+		return m_Features2.features;
+	}
 
     void PrepareCreation()
     {

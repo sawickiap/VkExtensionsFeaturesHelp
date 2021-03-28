@@ -212,7 +212,8 @@ Enables or disables all device feature structures specified in the definition fi
 
 Returns reference to a given feature structure, so you can inspect it to see which specific features are supported, as well as alter it before it is passed as `VkDeviceCreateInfo::pNext`. You can call it only after `GetPhysicalDeviceFeatures`. You shall only disable features, not enable those that are `VK_FALSE` already and so not supported.
 
-**VkPhysicalDeviceFeatures& GetFeatures()**
+**VkPhysicalDeviceFeatures& GetFeatures()**<br>
+**const VkPhysicalDeviceFeatures& GetFeatures() const**
 
 Returns reference to the structure with switches for standard Vulkan features, so you can inspect it to see which features are supported, as well as alter it before it is passed to device creation. You can call it only after `GetPhysicalDeviceFeatures`. You shall only disable features, not enable those that are `VK_FALSE` already and so not supported.
 
