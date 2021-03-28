@@ -9,8 +9,8 @@
 
 The library provides a domain-specific language to describe the list of required or supported extensions, features, and layers. The language is fully defined in terms of preprocessor macros, so no custom build step is needed.
 
-Author: Adam Sawicki - https://asawicki.info 
-Version: 1.0.0, 2021-03-28 
+Author: Adam Sawicki - https://asawicki.info<br>
+Version: 1.0.0, 2021-03-28<br>
 License: MIT (see file: [LICENSE](LICENSE))
 
 ## Documentation
