@@ -14,7 +14,7 @@ This document provides step-by-step guide needed to setup and use the library. A
     - Vulkan header needs to be included by the user.
 - Should be compatible with various platforms, compilers, 32-bit as well as 64-bit (although it was developed and tested just on Windows using Visual Studio 2019, x64).
 - Errors are reported by returning `VkResult` from functions, like in Vulkan.
-- Correct use of the API is validated using `assert`.
+- Correct use of the API is validated using `assert` (can be configured using a macro).
 - C++ exceptions and RTTI are not used.
 
 ## Setup

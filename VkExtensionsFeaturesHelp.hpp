@@ -2,7 +2,7 @@
 VkExtensionsFeaturesHelp - Small header-only C++ library that helps to initialize Vulkan instance and device object
 
 Author:  Adam Sawicki - https://asawicki.info - adam__DELETE__@asawicki.info
-Version: 1.0.0, 2021-03-28
+Version: 1.1.0, 2021-04-08
 License: MIT
 
 Documentation: see README.md and other .md files in the repository or online on GitHub:
@@ -10,9 +10,14 @@ https://github.com/sawickiap/VkExtensionsFeaturesHelp
 
 # Version history
 
+Version 1.1.0, 2021-04-08
+
+- Added macro VKEFH_ASSERT that can be defined before including this file to use
+  custom assert. (Thanks Kamil Nowakowski for the suggestion!)
+
 Version 1.0.0, 2021-03-28
 
-    First version.
+- First version.
 
 # License
 
@@ -40,8 +45,13 @@ SOFTWARE.
 
 #include <vector>
 #include <cstdint>
-#include <cassert>
 #include <cstring>
+
+// Define this macro before including this file to use your own assert.
+#ifndef VKEFH_ASSERT
+    #include <cassert>
+    #define VKEFH_ASSERT(expr) assert(expr)
+#endif
 
 namespace VKEFH
 {
@@ -72,7 +82,7 @@ public:
         size_t index = Find(name);
         if(index != SIZE_MAX)
             return m_Items[index].m_Supported;
-        assert(0 && "You can query only for items specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can query only for items specified in VkExtensionsFeatures.inl.");
         return false;
     }
     bool IsEnabled(const char* name) const
@@ -80,7 +90,7 @@ public:
         size_t index = Find(name);
         if(index != SIZE_MAX)
             return m_Items[index].m_Enabled;
-        assert(0 && "You can query only for items specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can query only for items specified in VkExtensionsFeatures.inl.");
         return false;
     }
     bool Enable(const char* name, bool enabled)
@@ -96,7 +106,7 @@ public:
             m_Items[index].m_Enabled = false;
             return false;
         }
-        assert(0 && "You can enable only for items specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can enable only for items specified in VkExtensionsFeatures.inl.");
         return false;
     }
     void EnableAll(bool enabled)
@@ -113,7 +123,7 @@ public:
         {
             if(m_Items[i].m_Enabled)
             {
-                assert(m_Items[i].m_Supported);
+                VKEFH_ASSERT(m_Items[i].m_Supported);
                 m_EnabledItemNames.push_back(m_Items[i].m_Name);
             }
         }
@@ -143,33 +153,33 @@ public:
 
     bool IsExtensionSupported(const char* extensionName) const
     {
-        assert(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
+        VKEFH_ASSERT(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
         return m_Extensions.IsSupported(extensionName);
     }
     bool IsExtensionEnabled(const char* extensionName) const
     {
-        assert(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
+        VKEFH_ASSERT(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
         return m_Extensions.IsEnabled(extensionName);
     }
     bool EnableExtension(const char* extensionName, bool enabled)
     {
-        assert(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
+        VKEFH_ASSERT(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
         return m_Extensions.Enable(extensionName, enabled);
     }
     void EnableAllExtensions(bool enabled)
     {
-        assert(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
+        VKEFH_ASSERT(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
         m_Extensions.EnableAll(enabled);
     }
 
     uint32_t GetEnabledExtensionCount() const
     {
-        assert(m_CreationPrepared && "You need to call PrepareCreation first.");
+        VKEFH_ASSERT(m_CreationPrepared && "You need to call PrepareCreation first.");
         return (uint32_t)m_Extensions.m_EnabledItemNames.size();
     }
     const char* const* GetEnabledExtensionNames() const
     {
-        assert(m_CreationPrepared && "You need to call PrepareCreation first.");
+        VKEFH_ASSERT(m_CreationPrepared && "You need to call PrepareCreation first.");
         return !m_Extensions.m_EnabledItemNames.empty() ? m_Extensions.m_EnabledItemNames.data() : nullptr;
     }
 
@@ -180,7 +190,7 @@ public:
         {
             return m_FeatureStructs[index].m_Enabled;
         }
-        assert(0 && "You can query only for feature structs specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can query only for feature structs specified in VkExtensionsFeatures.inl.");
         return false;
     }
     void EnableFeatureStruct(const char* structName, bool enabled)
@@ -191,7 +201,7 @@ public:
             m_FeatureStructs[index].m_Enabled = enabled;
             return;
         }
-        assert(0 && "You can enable only feature structs specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can enable only feature structs specified in VkExtensionsFeatures.inl.");
     }
 
     bool IsFeatureStructEnabled(VkStructureType sType) const
@@ -201,7 +211,7 @@ public:
         {
             return m_FeatureStructs[index].m_Enabled;
         }
-        assert(0 && "You can query only for feature structs specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can query only for feature structs specified in VkExtensionsFeatures.inl.");
         return false;
     }
     void EnableFeatureStruct(VkStructureType sType, bool enabled)
@@ -212,7 +222,7 @@ public:
             m_FeatureStructs[index].m_Enabled = enabled;
             return;
         }
-        assert(0 && "You can enable only feature structs specified in VkExtensionsFeatures.inl.");
+        VKEFH_ASSERT(0 && "You can enable only feature structs specified in VkExtensionsFeatures.inl.");
     }
 
     void EnableAllFeatureStructs(bool enabled)
@@ -250,7 +260,7 @@ protected:
 
 	void LoadExtensions(const VkExtensionProperties* extProps, size_t extPropCount)
     {
-        assert(!m_ExtensionsEnumerated && "You should call EnumerateExtensions only once.");
+        VKEFH_ASSERT(!m_ExtensionsEnumerated && "You should call EnumerateExtensions only once.");
         for(size_t extPropIndex = 0; extPropIndex < extPropCount; ++extPropIndex)
         {
             for(size_t extIndex = 0, extCount = m_Extensions.m_Items.size(); extIndex < extCount; ++extIndex)
@@ -267,7 +277,7 @@ protected:
 
     void PrepareEnabledExtensionNames()
     {
-        assert(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
+        VKEFH_ASSERT(m_ExtensionsEnumerated && "You should call EnumerateExtensions first.");
         m_Extensions.PrepareEnabled();
     }
 
@@ -365,7 +375,7 @@ public:
 
     VkResult EnumerateLayers()
     {
-        assert(!m_LayersEnumerated && "You should call EnumerateLayers only once.");
+        VKEFH_ASSERT(!m_LayersEnumerated && "You should call EnumerateLayers only once.");
         uint32_t layerPropCount = 0;
         VkResult res = vkEnumerateInstanceLayerProperties(&layerPropCount, nullptr);
         if(res != VK_SUCCESS)
@@ -384,28 +394,28 @@ public:
 
     bool IsLayerSupported(const char* layerName) const
     {
-        assert(m_LayersEnumerated && "You should call EnumerateLayers first.");
+        VKEFH_ASSERT(m_LayersEnumerated && "You should call EnumerateLayers first.");
         return m_Layers.IsSupported(layerName);
     }
     bool IsLayerEnabled(const char* layerName) const
     {
-        assert(m_LayersEnumerated && "You should call EnumerateLayers first.");
+        VKEFH_ASSERT(m_LayersEnumerated && "You should call EnumerateLayers first.");
         return m_Layers.IsEnabled(layerName);
     }
     bool EnableLayer(const char* layerName, bool enabled)
     {
-        assert(m_LayersEnumerated && "You should call EnumerateLayers first.");
+        VKEFH_ASSERT(m_LayersEnumerated && "You should call EnumerateLayers first.");
         return m_Layers.Enable(layerName, enabled);
     }
     void EnableAllLayers(bool enabled)
     {
-        assert(m_LayersEnumerated && "You should call EnumerateLayers first.");
+        VKEFH_ASSERT(m_LayersEnumerated && "You should call EnumerateLayers first.");
         m_Layers.EnableAll(enabled);
     }
 
     void PrepareCreation()
     {
-        assert(m_LayersEnumerated && "You should call EnumerateLayers first.");
+        VKEFH_ASSERT(m_LayersEnumerated && "You should call EnumerateLayers first.");
         
         PrepareEnabledExtensionNames();
         
@@ -416,7 +426,7 @@ public:
         {
             if(m_FeatureStructs[structIndex].m_Enabled)
             {
-                assert(m_FeatureStructs[structIndex].m_StructPtr->sType == m_FeatureStructs[structIndex].m_sType);
+                VKEFH_ASSERT(m_FeatureStructs[structIndex].m_StructPtr->sType == m_FeatureStructs[structIndex].m_sType);
                 m_FeatureStructs[structIndex].m_StructPtr->pNext = m_FeaturesChain;
                 m_FeaturesChain = m_FeatureStructs[structIndex].m_StructPtr;
             }
@@ -427,17 +437,17 @@ public:
 
     uint32_t GetEnabledLayerCount() const
     {
-        assert(m_CreationPrepared && "You need to call PrepareCreation first.");
+        VKEFH_ASSERT(m_CreationPrepared && "You need to call PrepareCreation first.");
         return (uint32_t)m_Layers.m_EnabledItemNames.size();
     }
     const char* const* GetEnabledLayerNames() const
     {
-        assert(m_CreationPrepared && "You need to call PrepareCreation first.");
+        VKEFH_ASSERT(m_CreationPrepared && "You need to call PrepareCreation first.");
         return !m_Layers.m_EnabledItemNames.empty() ? m_Layers.m_EnabledItemNames.data() : nullptr;
     }
     const void* GetFeaturesChain() const
     {
-        assert(m_CreationPrepared && "You need to call PrepareCreation first.");
+        VKEFH_ASSERT(m_CreationPrepared && "You need to call PrepareCreation first.");
         return m_FeaturesChain;
     }
 
@@ -477,12 +487,12 @@ class DeviceInitHelp : public InitHelpBase
     private: structName m_##structName = { (sType) }; \
     public: structName& Get##structName() \
     { \
-        assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first."); \
+        VKEFH_ASSERT(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first."); \
         return m_##structName; \
     } \
     public: const structName& Get##structName() const \
     { \
-        assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first."); \
+        VKEFH_ASSERT(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first."); \
         return m_##structName; \
     }
 
@@ -521,7 +531,7 @@ public:
 
     VkResult EnumerateExtensions(VkPhysicalDevice physicalDevice)
     {
-        assert(physicalDevice);
+        VKEFH_ASSERT(physicalDevice);
         uint32_t extPropCount = 0;
         VkResult res = vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extPropCount, nullptr);
         if(res != VK_SUCCESS)
@@ -543,17 +553,17 @@ public:
 
     void GetPhysicalDeviceFeatures(VkPhysicalDevice physicalDevice)
     {
-        assert(physicalDevice);
-        assert(!m_PhysicalDeviceFeaturesQueried && "You should call GetPhysicalDeviceFeatures only once.");
+        VKEFH_ASSERT(physicalDevice);
+        VKEFH_ASSERT(!m_PhysicalDeviceFeaturesQueried && "You should call GetPhysicalDeviceFeatures only once.");
 
-        assert(m_Features2.sType == VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
+        VKEFH_ASSERT(m_Features2.sType == VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
         m_Features2.pNext = nullptr;
 
         for(size_t structIndex = 0, structCount = m_FeatureStructs.size(); structIndex < structCount; ++structIndex)
         {
             if(m_FeatureStructs[structIndex].m_Enabled)
             {
-                assert(m_FeatureStructs[structIndex].m_StructPtr->sType == m_FeatureStructs[structIndex].m_sType);
+                VKEFH_ASSERT(m_FeatureStructs[structIndex].m_StructPtr->sType == m_FeatureStructs[structIndex].m_sType);
                 m_FeatureStructs[structIndex].m_StructPtr->pNext = (VkBaseInStructure*)m_Features2.pNext;
                 m_Features2.pNext = m_FeatureStructs[structIndex].m_StructPtr;
             }
@@ -566,29 +576,29 @@ public:
 
     VkPhysicalDeviceFeatures& GetFeatures()
     {
-        assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
+        VKEFH_ASSERT(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
         return m_Features2.features;
     }
 	const VkPhysicalDeviceFeatures& GetFeatures() const
 	{
-		assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
+        VKEFH_ASSERT(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
 		return m_Features2.features;
 	}
 
     void PrepareCreation()
     {
-        assert(m_ExtensionsEnumerated && "You need to call EnumerateExtensions first.");
-        assert(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
+        VKEFH_ASSERT(m_ExtensionsEnumerated && "You need to call EnumerateExtensions first.");
+        VKEFH_ASSERT(m_PhysicalDeviceFeaturesQueried && "You need to call GetPhysicalDeviceFeatures first.");
 
         PrepareEnabledExtensionNames();
 
-        assert(m_Features2.sType == VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
+        VKEFH_ASSERT(m_Features2.sType == VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
         m_Features2.pNext = nullptr;
         for(size_t structIndex = 0, structCount = m_FeatureStructs.size(); structIndex < structCount; ++structIndex)
         {
             if(m_FeatureStructs[structIndex].m_Enabled)
             {
-                assert(m_FeatureStructs[structIndex].m_StructPtr->sType == m_FeatureStructs[structIndex].m_sType);
+                VKEFH_ASSERT(m_FeatureStructs[structIndex].m_StructPtr->sType == m_FeatureStructs[structIndex].m_sType);
                 m_FeatureStructs[structIndex].m_StructPtr->pNext = (VkBaseInStructure*)m_Features2.pNext;
                 m_Features2.pNext = m_FeatureStructs[structIndex].m_StructPtr;
             }
@@ -599,7 +609,7 @@ public:
 
     const void* GetFeaturesChain() const
     {
-        assert(m_CreationPrepared && "You need to call PrepareCreation first.");
+        VKEFH_ASSERT(m_CreationPrepared && "You need to call PrepareCreation first.");
         return &m_Features2;
     }
 
